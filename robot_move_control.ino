@@ -3,13 +3,17 @@
 #define right_back 3
 #define left_front 4
 #define left_back 5
-
+#define vcc_ir 8 //connect to vcc on ir sensor module and set this pin high
+#define out_ir 12 //connect to output pin on ir sensor module
 void setup(){
   pinMode (2, OUTPUT);
   pinMode (3, OUTPUT);
   pinMode (4, OUTPUT);
   pinMode (5, OUTPUT);
-  
+  pinMode (12, INPUT);
+  pinMode (8, OUTPUT);
+  digitalWrite (out_ir, HIGH);
+    
 }
 //function to move forward with both motors having one pin high
 void move_forward(){
@@ -48,15 +52,16 @@ void turn_left(){
 }
 
 void loop(){
-  turn_right();//calling each function once to confirm pin configuration and practical implementation
-  delay(5000);
-  motor_stop();
-  delay(5000);
-  turn_left();
-  delay(5000);
-  move_forward();
-  delay(5000);
-  move_reverse();
-  delay(5000);
-}
+  int sensor_one = 0;
+  digitalWrite (vcc_ir, HIGH);
+  sensor_one = digitalRead(out_ir);
+  if(sensor_one == 0){ //sensor reading 0 means dark/black line
+    turn_left();
+  }
+  else{                //sensor reading 1 signifies bright/white line
+    turn_right();
+  }
+  }
+  
+
 
